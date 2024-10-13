@@ -23,3 +23,15 @@ def test_index(client):
     response = client.get("/")
     assert response.status_code == 200
     assert b"Welcome to the GUDLFT Registration Portal!" in response.data
+
+
+def test_login(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert b"john@simplylift.co" in response.data
+
+
+def test_login_with_unknown_email_should_show_error(client):
+    response = client.post("/showSummary", data={"email": "unknown"})
+    assert response.status_code == 200
+    assert b"Sorry, that email was not found." in response.data

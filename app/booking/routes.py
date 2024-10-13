@@ -21,7 +21,13 @@ clubs = loadClubs()
 
 @bp.route("/showSummary", methods=["POST"])
 def showSummary():
-    club = [club for club in clubs if club["email"] == request.form["email"]][0]
+    try:
+        club = [club for club in clubs if club["email"] == request.form["email"]][
+            0
+        ] or None
+    except IndexError:
+        flash("Sorry, that email was not found.")
+        return render_template("index.html")
     return render_template("booking/welcome.html", club=club, competitions=competitions)
 
 
