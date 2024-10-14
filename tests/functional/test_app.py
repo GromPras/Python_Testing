@@ -153,3 +153,10 @@ def test_book(client):
     assert b"Places available: 14" in response.data
     assert b"How many places?" in response.data
     assert b'<button type="submit">Book</button>' in response.data
+
+
+def test_book_wrong_url(client):
+    login(client, "john@simplylift.co")
+    response = client.get("/book/Spring%20Festival/Simply%20Lif")
+    assert response.status_code == 200
+    assert b"Something went wrong-please try again" in response.data
