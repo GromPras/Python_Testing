@@ -93,3 +93,8 @@ def purchasePlaces():
         return render_template(
             "booking/welcome.html", club=club, competitions=competitions
         )
+
+
+@bp.route("/pointsBoard")
+def pointsBoard():
+    return render_template("booking/pointsBoard.html", clubs=clubs)

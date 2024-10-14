@@ -122,3 +122,16 @@ def test_booking_past_competition(client):
     assert response.status_code == 200
     assert b"Sorry, this competition has already ended." in response.data
     assert b"Places available: 13" in response.data
+
+
+def test_points_display(client):
+    response = client.get("/pointsBoard")
+    assert response.status_code == 200
+    assert b"Simply Lift: 2 Points" in response.data
+    assert b"Iron Temple: 4 Points" in response.data
+
+
+def test_points_display_link(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert b'<a href="/pointsBoard">Points Board</a>' in response.data
