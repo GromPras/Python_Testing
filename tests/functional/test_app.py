@@ -143,3 +143,13 @@ def test_logout(client):
     response = client.get("/logout", follow_redirects=True)
     assert response.status_code == 200
     assert b"Welcome to the GUDLFT Registration Portal!" in response.data
+
+
+def test_book(client):
+    login(client, "john@simplylift.co")
+    response = client.get("/book/Spring%20Festival/Simply%20Lift")
+    assert response.status_code == 200
+    assert b"Spring Festival" in response.data
+    assert b"Places available: 14" in response.data
+    assert b"How many places?" in response.data
+    assert b'<button type="submit">Book</button>' in response.data
