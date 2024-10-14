@@ -41,6 +41,17 @@ def test_login_with_unknown_email_should_show_error(client):
     assert b"Sorry, that email was not found." in response.data
 
 
+def test_booking_more_than_12_places_on_one_submit(client):
+    login(client, "john@simplylift.co")
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 13},
+    )
+    assert response.status_code == 200
+    assert b"Sorry, you can only book up to 12 places." in response.data
+    assert b"Places available: 25" in response.data
+
+
 def test_booking(client):
     login(client, "john@simplylift.co")
     response = client.post(
@@ -50,6 +61,7 @@ def test_booking(client):
     assert response.status_code == 200
     assert b"Great-booking complete!" in response.data
     assert b"Number of Places: 20" in response.data
+    assert b"Points available: 8" in response.data
 
 
 def test_booking_more_than_allowed_points(client):
@@ -64,17 +76,6 @@ def test_booking_more_than_allowed_points(client):
     assert b"Places available: 20" in response.data
 
 
-def test_booking_more_than_12_places_on_one_submit(client):
-    login(client, "john@simplylift.co")
-    response = client.post(
-        "/purchasePlaces",
-        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 13},
-    )
-    assert response.status_code == 200
-    assert b"Sorry, you can only book up to 12 places." in response.data
-    assert b"Places available: 20" in response.data
-
-
 def test_booking_more_than_12_places_in_multiple_submits(client):
     login(client, "john@simplylift.co")
     response = client.post(
@@ -83,10 +84,12 @@ def test_booking_more_than_12_places_in_multiple_submits(client):
     )
     assert response.status_code == 200
     assert b"Number of Places: 14" in response.data
+    assert b"Points available: 2" in response.data
     response = client.post(
         "/purchasePlaces",
-        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 7},
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 2},
     )
+    print(response.data)
     assert response.status_code == 200
     assert b"Sorry, you can only book up to 12 places" in response.data
     assert b"Places available: 14" in response.data
