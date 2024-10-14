@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import render_template, request, flash
 from app.booking import bp
 
@@ -13,6 +14,9 @@ def loadCompetitions():
     with open("competitions.json") as comps:
         listOfCompetitions = json.load(comps)["competitions"]
         for c in listOfCompetitions:
+            c["finished"] = (
+                datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") < datetime.now()
+            )
             c["subscriptions"] = {}
         return listOfCompetitions
 
@@ -63,6 +67,11 @@ def purchasePlaces():
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
     placesRequired = int(request.form["places"])
     placesBooked = int(getPlacesBooked(competition, club["name"]))
+    if competition["finished"]:
+        flash("Sorry, this competition has already ended.")
+        return render_template(
+            "booking/booking.html", club=club, competition=competition
+        )
     if placesRequired > int(club["points"]):
         flash(f"You do not have enough points. Your points: {club['points']}")
         return render_template(

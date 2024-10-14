@@ -90,3 +90,23 @@ def test_booking_more_than_12_places_in_multiple_submits(client):
     assert response.status_code == 200
     assert b"Sorry, you can only book up to 12 places" in response.data
     assert b"Places available: 14" in response.data
+
+
+def test_booking_button_is_hidden_for_past_competitions(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert (
+        b'<a href="/book/Fall%20Classic/Simply%20Lift">Book Places</a>'
+        not in response.data
+    )
+
+
+def test_booking_past_competition(client):
+    login(client, "john@simplylift.co")
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Fall Classic", "places": 1},
+    )
+    assert response.status_code == 200
+    assert b"Sorry, this competition has already ended." in response.data
+    assert b"Places available: 13" in response.data
