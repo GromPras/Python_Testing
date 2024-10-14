@@ -101,6 +101,15 @@ def test_booking_button_is_hidden_for_past_competitions(client):
     )
 
 
+def test_booking_button_is_shown_for_future_competitions(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert (
+        b'<a href="/book/Spring%20Festival/Simply%20Lift">Book Places</a>'
+        in response.data
+    )
+
+
 def test_booking_past_competition(client):
     login(client, "john@simplylift.co")
     response = client.post(
