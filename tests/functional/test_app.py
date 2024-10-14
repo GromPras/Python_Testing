@@ -62,3 +62,31 @@ def test_booking_more_than_allowed_points(client):
     assert response.status_code == 200
     assert b"You do not have enough points. Your points: 4" in response.data
     assert b"Places available: 20" in response.data
+
+
+def test_booking_more_than_12_places_on_one_submit(client):
+    login(client, "john@simplylift.co")
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 13},
+    )
+    assert response.status_code == 200
+    assert b"Sorry, you can only book up to 12 places." in response.data
+    assert b"Places available: 20" in response.data
+
+
+def test_booking_more_than_12_places_in_multiple_submits(client):
+    login(client, "john@simplylift.co")
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 6},
+    )
+    assert response.status_code == 200
+    assert b"Number of Places: 14" in response.data
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 7},
+    )
+    assert response.status_code == 200
+    assert b"Sorry, you can only book up to 12 places" in response.data
+    assert b"Places available: 14" in response.data

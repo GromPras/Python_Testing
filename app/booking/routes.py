@@ -12,7 +12,16 @@ def loadClubs():
 def loadCompetitions():
     with open("competitions.json") as comps:
         listOfCompetitions = json.load(comps)["competitions"]
+        for c in listOfCompetitions:
+            c["subscriptions"] = {}
         return listOfCompetitions
+
+
+def getPlacesBooked(competition, clubName):
+    for key in competition["subscriptions"]:
+        if key == clubName:
+            return competition["subscriptions"][key]
+    return 0
 
 
 competitions = loadCompetitions()
@@ -53,8 +62,14 @@ def purchasePlaces():
     ]
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
     placesRequired = int(request.form["places"])
+    placesBooked = int(getPlacesBooked(competition, club["name"]))
     if placesRequired > int(club["points"]):
         flash(f"You do not have enough points. Your points: {club['points']}")
+        return render_template(
+            "booking/booking.html", club=club, competition=competition
+        )
+    if placesRequired > 12 or (placesRequired + placesBooked) > 12:
+        flash("Sorry, you can only book up to 12 places.")
         return render_template(
             "booking/booking.html", club=club, competition=competition
         )
@@ -62,6 +77,7 @@ def purchasePlaces():
         competition["numberOfPlaces"] = (
             int(competition["numberOfPlaces"]) - placesRequired
         )
+        competition["subscriptions"][club["name"]] = placesRequired
         flash("Great-booking complete!")
         return render_template(
             "booking/welcome.html", club=club, competitions=competitions
