@@ -1,3 +1,4 @@
+from _pytest.nodes import FSCollector
 import pytest
 from app import create_app
 
@@ -135,3 +136,10 @@ def test_points_display_link(client):
     response = client.get("/")
     assert response.status_code == 200
     assert b'<a href="/pointsBoard">Points Board</a>' in response.data
+
+
+def test_logout(client):
+    login(client, "john@simplylift.co")
+    response = client.get("/logout", follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Welcome to the GUDLFT Registration Portal!" in response.data
