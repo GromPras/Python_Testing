@@ -1,8 +1,14 @@
+import pytest
 from server import app
 
 
-def test_purchasing_1_place():
+@pytest.fixture
+def client():
     client = app.test_client()
+    yield client
+
+
+def test_purchasing_1_place(client):
     response = client.post(
         "/purchasePlaces",
         data={"club": "Simply Lift", "competition": "Spring Festival", "places": 1},
