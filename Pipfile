@@ -12,6 +12,8 @@ markupsafe = "*"
 werkzeug = "*"
 python-dotenv = "*"
 locust = "*"
+selenium = "*"
+pytest = "*"
 
 [dev-packages]
 
