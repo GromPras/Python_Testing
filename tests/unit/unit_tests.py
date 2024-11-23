@@ -14,6 +14,12 @@ def test_index(client):
     assert b"Welcome to the GUDLFT Registration Portal!" in response.data
 
 
+def test_login_with_registered_email(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert b"john@simplylift.co" in response.data
+
+
 def test_purchasing_1_place(client):
     response = client.post(
         "/purchasePlaces",
