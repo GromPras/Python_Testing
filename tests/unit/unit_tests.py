@@ -8,6 +8,12 @@ def client():
     yield client
 
 
+def test_index(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert b"Welcome to the GUDLFT Registration Portal!" in response.data
+
+
 def test_purchasing_1_place(client):
     response = client.post(
         "/purchasePlaces",
