@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-click = "==7.1.2"
-flask = "==1.1.2"
-itsdangerous = "==1.1.0"
-jinja2 = "==2.11.2"
-markupsafe = "==1.1.1"
-werkzeug = "==1.0.1"
+click = "*"
+flask = "*"
+itsdangerous = "*"
+jinja2 = "*"
+markupsafe = "*"
+werkzeug = "*"
 python-dotenv = "*"
 locust = "*"
 
