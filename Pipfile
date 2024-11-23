@@ -10,6 +10,8 @@ itsdangerous = "==1.1.0"
 jinja2 = "==2.11.2"
 markupsafe = "==1.1.1"
 werkzeug = "==1.0.1"
+python-dotenv = "*"
+locust = "*"
 
 [dev-packages]
 
