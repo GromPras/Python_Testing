@@ -20,6 +20,12 @@ def test_login_with_registered_email(client):
     assert b"john@simplylift.co" in response.data
 
 
+def test_login_with_unregistered_email_show_error_message(client):
+    response = client.post("/showSummary", data={"email": "wrongemail@simplylift.co"})
+    assert response.status_code == 401
+    assert b"Sorry, that email wasn&#39;t found." in response.data
+
+
 def test_purchasing_1_place(client):
     response = client.post(
         "/purchasePlaces",
