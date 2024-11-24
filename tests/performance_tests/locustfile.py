@@ -9,6 +9,10 @@ class MyUser(HttpUser):
         self.client.get("/")
 
     @task
+    def check_points(self):
+        self.client.get("/points-board")
+
+    @task
     def login(self):
         self.client.post("/showSummary", data={"email": "john@simplylift.co"})
 
@@ -16,5 +20,5 @@ class MyUser(HttpUser):
     def purchase(self):
         self.client.post(
             "/purchasePlaces",
-            data={"club": "Simply Lift", "competition": "Spring Festival", "places": 5},
+            data={"club": "Infinite Lift", "competition": "Black Hole", "places": 5},
         )

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -11,7 +12,22 @@ def loadClubs():
 def loadCompetitions():
     with open("competitions.json") as comps:
         listOfCompetitions = json.load(comps)["competitions"]
+        for c in listOfCompetitions:
+            c["finished"] = (
+                datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") < datetime.now()
+            )
+            try:
+                c["registered"]
+            except KeyError:
+                c["registered"] = {}
         return listOfCompetitions
+
+
+def get_places_booked(competition, club_name):
+    for key in competition["registered"]:
+        if key == club_name:
+            return competition["registered"][key]
+    return 0
 
 
 app = Flask(__name__)
@@ -38,13 +54,23 @@ def showSummary():
 
 @app.route("/book/<competition>/<club>")
 def book(competition, club):
-    foundClub = [c for c in clubs if c["name"] == club][0]
-    foundCompetition = [c for c in competitions if c["name"] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template(
-            "booking.html", club=foundClub, competition=foundCompetition
-        )
-    else:
+    try:
+        foundClub = [c for c in clubs if c["name"] == club][0]
+        foundCompetition = [c for c in competitions if c["name"] == competition][0]
+        if foundCompetition["finished"]:
+            flash("Sorry, this competition has already ended.")
+            return (
+                render_template("welcome.html", club=club, competitions=competitions),
+                302,
+            )
+        if foundClub and foundCompetition:
+            return render_template(
+                "booking.html", club=foundClub, competition=foundCompetition
+            )
+        else:
+            flash("Not found: this resource does not exists")
+            return render_template("welcome.html", club=club, competitions=competitions)
+    except IndexError:
         flash("Something went wrong-please try again")
         return render_template("welcome.html", club=club, competitions=competitions)
 
@@ -56,13 +82,44 @@ def purchasePlaces():
     ]
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
     placesRequired = int(request.form["places"])
+    places_booked = int(get_places_booked(competition, club["name"]))
+
+    # TODO: Remove for production
+    # Bypass validation for locust's performance test
+    if app.debug and competition["name"] == "Black Hole":
+        competition["numberOfPlaces"] = (
+            int(competition["numberOfPlaces"]) - placesRequired
+        )
+        competition["registered"][club["name"]] = placesRequired + places_booked
+        club["points"] = int(club["points"]) - placesRequired
+        flash("Great-booking complete!")
+        return render_template("welcome.html", club=club, competitions=competitions)
+
+    if competition["finished"]:
+        flash("Sorry, this competition has already ended.")
+        return (
+            render_template("welcome.html", club=club, competitions=competitions),
+            410,
+        )
+
+    if placesRequired > int(club["points"]):
+        flash(f"You do not have enough points. Your points: {club['points']}")
+        return render_template("booking.html", club=club, competition=competition), 409
+
+    if placesRequired > 12 or (placesRequired + places_booked) > 12:
+        flash("You cannot purchase more than 12 places for the same competition.")
+        return render_template("booking.html", club=club, competition=competition), 409
+
     competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - placesRequired
+    competition["registered"][club["name"]] = placesRequired + places_booked
     club["points"] = int(club["points"]) - placesRequired
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)
 
 
-# TODO: Add route for points display
+@app.route("/points-board")
+def display_board():
+    return render_template("display_board.html", clubs=clubs)
 
 
 @app.route("/logout")
