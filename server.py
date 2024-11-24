@@ -19,6 +19,13 @@ def loadCompetitions():
         return listOfCompetitions
 
 
+def get_places_booked(competition, club_name):
+    for key in competition["registered"]:
+        if key == club_name:
+            return competition["registered"][key]
+    return 0
+
+
 app = Flask(__name__)
 app.secret_key = "something_special"
 
