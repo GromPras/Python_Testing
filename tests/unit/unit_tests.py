@@ -26,6 +26,15 @@ def test_login_with_unregistered_email_show_error_message(client):
     assert b"Sorry, that email wasn&#39;t found." in response.data
 
 
+def test_show_summary(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert b"Summary | GUDLFT" in response.data
+    assert b"Points available:" in response.data
+    assert b"Spring Festival" in response.data
+    assert b"Fall Classic" in response.data
+    assert b"Book Places" in response.data
+
+
 def test_purchasing_1_place(client):
     response = client.post(
         "/purchasePlaces",
