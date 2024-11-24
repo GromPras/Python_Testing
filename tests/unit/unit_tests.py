@@ -101,3 +101,12 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
         b"You cannot purchase more than 12 places for the same competition."
         in response.data
     )
+
+
+def test_booking_button_is_hidden_for_past_competitions(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert (
+        b'<a href="/book/Fall%20Classic/Simply%20Lift">Book Places</a>'
+        not in response.data
+    )
