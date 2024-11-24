@@ -146,3 +146,9 @@ def test_book(client):
     assert b"Places available: 12" in response.data
     assert b"How many places?" in response.data
     assert b'<button type="submit">Book</button>' in response.data
+
+
+def test_book_passed_competition(client):
+    login(client, "john@simplylift.co")
+    response = client.get("/book/Fall%20Classic/Simply%20Lift")
+    assert response.status_code == 302
