@@ -137,3 +137,12 @@ def test_booking_button_hidden_for_full_competitions(client):
         b'<a href="/book/Full%20Weight/Simply%20Lift">Book Places</a>'
         not in response.data
     )
+
+
+def test_book(client):
+    response = client.get("/book/Spring%20Festival/Simply%20Lift")
+    assert response.status_code == 200
+    assert b"Spring Festival" in response.data
+    assert b"Places available: 12" in response.data
+    assert b"How many places?" in response.data
+    assert b'<button type="submit">Book</button>' in response.data
