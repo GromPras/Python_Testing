@@ -11,6 +11,11 @@ def loadClubs():
 def loadCompetitions():
     with open("competitions.json") as comps:
         listOfCompetitions = json.load(comps)["competitions"]
+        for c in listOfCompetitions:
+            try:
+                c["registered"]
+            except KeyError:
+                c["registered"] = {}
         return listOfCompetitions
 
 
