@@ -69,3 +69,16 @@ def test_purchasing_more_than_allowed_points(client):
     assert response.status_code == 409
     assert b"You do not have enough points. Your points: 13" in response.data
     assert b"Places available: 20" in response.data
+
+
+def test_purchasing_more_than_12_places_in_one_go(client):
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Weight", "competition": "Spring Festival", "places": 13},
+    )
+    print(response.data)
+    assert response.status_code == 409
+    assert (
+        b"You cannot purchase more than 12 places for the same competition."
+        in response.data
+    )
