@@ -19,19 +19,19 @@ def test_index(client):
 
 
 def test_login_with_registered_email(client):
-    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    response = login(client, "john@simplylift.co")
     assert response.status_code == 200
     assert b"john@simplylift.co" in response.data
 
 
 def test_login_with_unregistered_email_show_error_message(client):
-    response = client.post("/showSummary", data={"email": "wrongemail@simplylift.co"})
+    response = login(client, "wrongemail@simplylift.co")
     assert response.status_code == 401
     assert b"Sorry, that email wasn&#39;t found." in response.data
 
 
 def test_show_summary(client):
-    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    response = login(client, "john@simplylift.co")
     assert b"Summary | GUDLFT" in response.data
     assert b"Points available:" in response.data
     assert b"Spring Festival" in response.data
