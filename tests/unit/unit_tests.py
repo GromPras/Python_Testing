@@ -88,7 +88,6 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
         "/purchasePlaces",
         data={"club": "Weight", "competition": "Spring Festival", "places": 8},
     )
-    print(response.data)
     assert response.status_code == 200
     assert b"Great-booking complete!" in response.data
     assert b"Number of Places: 12" in response.data
@@ -97,7 +96,6 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
         "/purchasePlaces",
         data={"club": "Weight", "competition": "Spring Festival", "places": 5},
     )
-    print(response.data)
     assert response.status_code == 409
     assert (
         b"You cannot purchase more than 12 places for the same competition."
