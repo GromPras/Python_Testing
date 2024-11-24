@@ -157,3 +157,10 @@ def test_book_passed_competition(client):
 def test_book_wrong_url(client):
     response = client.get("/book/Spring%20Festival/Simply%20Lif")
     assert b"Something went wrong-please try again" in response.data
+
+
+def test_points_display(client):
+    response = client.get("/points-board")
+    assert response.status_code == 200
+    assert b"Simply Lift: 5 Points" in response.data
+    assert b"Iron Temple: 4 Points" in response.data
