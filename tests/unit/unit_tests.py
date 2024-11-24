@@ -128,3 +128,12 @@ def test_booking_past_competition(client):
     assert response.status_code == 410
     assert b"Sorry, this competition has already ended." in response.data
     assert b"Number of Places: 13" in response.data
+
+
+def test_booking_button_hidden_for_full_competitions(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert (
+        b'<a href="/book/Full%20Weight/Simply%20Lift">Book Places</a>'
+        not in response.data
+    )
