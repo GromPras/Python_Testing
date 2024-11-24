@@ -110,3 +110,11 @@ def test_booking_button_is_hidden_for_past_competitions(client):
         b'<a href="/book/Fall%20Classic/Simply%20Lift">Book Places</a>'
         not in response.data
     )
+
+
+def test_booking_button_is_shown_for_future_competitions(client):
+    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    assert response.status_code == 200
+    assert (
+        b'<a href="/book/Black%20Hole/Simply%20Lift">Book Places</a>' in response.data
+    )
