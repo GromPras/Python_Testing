@@ -152,3 +152,8 @@ def test_book_passed_competition(client):
     login(client, "john@simplylift.co")
     response = client.get("/book/Fall%20Classic/Simply%20Lift")
     assert response.status_code == 302
+
+
+def test_book_wrong_url(client):
+    response = client.get("/book/Spring%20Festival/Simply%20Lif")
+    assert b"Something went wrong-please try again" in response.data
