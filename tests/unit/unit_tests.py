@@ -127,4 +127,4 @@ def test_booking_past_competition(client):
     )
     assert response.status_code == 410
     assert b"Sorry, this competition has already ended." in response.data
-    assert b"Places available: 13" in response.data
+    assert b"Number of Places: 13" in response.data
