@@ -59,3 +59,13 @@ def test_purchasing_multiple_places(client):
     assert b"Great-booking complete!" in response.data
     assert b"Number of Places: 20" in response.data
     assert b"Points available: 8" in response.data
+
+
+def test_purchasing_more_than_allowed_points(client):
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Weight", "competition": "Spring Festival", "places": 15},
+    )
+    assert response.status_code == 200
+    assert b"You do not have enough points. Your points: 13" in response.data
+    assert b"Places available: 20" in response.data
