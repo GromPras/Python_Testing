@@ -118,3 +118,13 @@ def test_booking_button_is_shown_for_future_competitions(client):
     assert (
         b'<a href="/book/Black%20Hole/Simply%20Lift">Book Places</a>' in response.data
     )
+
+
+def test_booking_past_competition(client):
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Fall Classic", "places": 1},
+    )
+    assert response.status_code == 410
+    assert b"Sorry, this competition has already ended." in response.data
+    assert b"Places available: 13" in response.data
