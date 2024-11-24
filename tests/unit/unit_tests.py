@@ -66,6 +66,6 @@ def test_purchasing_more_than_allowed_points(client):
         "/purchasePlaces",
         data={"club": "Weight", "competition": "Spring Festival", "places": 15},
     )
-    assert response.status_code == 200
+    assert response.status_code == 409
     assert b"You do not have enough points. Your points: 13" in response.data
     assert b"Places available: 20" in response.data
