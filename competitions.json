@@ -14,6 +14,11 @@
             "name": "Black Hole",
             "date": "2025-10-22 13:30:00",
             "numberOfPlaces": "999999"
+        },
+        {
+            "name": "Full Weight",
+            "date": "2025-10-22 13:30:00",
+            "numberOfPlaces": "0"
         }
     ]
 }
