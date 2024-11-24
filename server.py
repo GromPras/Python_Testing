@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, flash, url_for
 
 
@@ -12,6 +13,9 @@ def loadCompetitions():
     with open("competitions.json") as comps:
         listOfCompetitions = json.load(comps)["competitions"]
         for c in listOfCompetitions:
+            c["finished"] = (
+                datetime.strptime(c["date"], "%Y-%m-%d %H:%M:%S") < datetime.now()
+            )
             try:
                 c["registered"]
             except KeyError:
