@@ -8,6 +8,10 @@ def client():
     yield client
 
 
+def login(client, mail):
+    return client.post("/showSummary", data={"email": mail}, follow_redirects=True)
+
+
 def test_index(client):
     response = client.get("/")
     assert response.status_code == 200
