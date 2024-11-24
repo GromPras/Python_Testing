@@ -164,3 +164,8 @@ def test_points_display(client):
     assert response.status_code == 200
     assert b"Simply Lift: 8 Points" in response.data
     assert b"Iron Temple: 4 Points" in response.data
+
+
+def test_points_display_page_should_be_accessible_without_login(client):
+    response = client.get("/")
+    assert b'<a href="/points-board">Points Board</a>' in response.data
