@@ -48,3 +48,14 @@ def test_purchasing_1_place(client):
     assert b"Great-booking complete!" in response.data
     assert b"Number of Places: 24" in response.data
     assert b"Points available: 12" in response.data
+
+
+def test_purchasing_multiple_places(client):
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "Simply Lift", "competition": "Spring Festival", "places": 4},
+    )
+    assert response.status_code == 200
+    assert b"Great-booking complete!" in response.data
+    assert b"Number of Places: 20" in response.data
+    assert b"Points available: 8" in response.data
