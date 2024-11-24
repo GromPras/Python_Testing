@@ -85,6 +85,13 @@ def purchasePlaces():
         flash("Great-booking complete!")
         return render_template("welcome.html", club=club, competitions=competitions)
 
+    if competition["finished"]:
+        flash("Sorry, this competition has already ended.")
+        return (
+            render_template("welcome.html", club=club, competitions=competitions),
+            410,
+        )
+
     if placesRequired > int(club["points"]):
         flash(f"You do not have enough points. Your points: {club['points']}")
         return render_template("booking.html", club=club, competition=competition), 409
