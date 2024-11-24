@@ -9,6 +9,10 @@ class MyUser(HttpUser):
         self.client.get("/")
 
     @task
+    def check_points(self):
+        self.client.get("/points-board")
+
+    @task
     def login(self):
         self.client.post("/showSummary", data={"email": "john@simplylift.co"})
 
