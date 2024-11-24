@@ -76,7 +76,6 @@ def test_purchasing_more_than_12_places_in_one_go(client):
         "/purchasePlaces",
         data={"club": "Weight", "competition": "Spring Festival", "places": 13},
     )
-    print(response.data)
     assert response.status_code == 409
     assert (
         b"You cannot purchase more than 12 places for the same competition."
