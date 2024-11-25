@@ -9,7 +9,7 @@ def client():
 
 
 def login(client, mail):
-    return client.post("/showSummary", data={"email": mail}, follow_redirects=True)
+    return client.post("/show-summary", data={"email": mail}, follow_redirects=True)
 
 
 def test_index(client):
@@ -41,7 +41,7 @@ def test_show_summary(client):
 
 def test_purchasing_1_place(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Simply Lift", "competition": "Spring Festival", "places": 1},
     )
     assert response.status_code == 200
@@ -52,7 +52,7 @@ def test_purchasing_1_place(client):
 
 def test_purchasing_multiple_places(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Simply Lift", "competition": "Spring Festival", "places": 4},
     )
     assert response.status_code == 200
@@ -63,7 +63,7 @@ def test_purchasing_multiple_places(client):
 
 def test_purchasing_more_than_allowed_points(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Weight", "competition": "Spring Festival", "places": 15},
     )
     assert response.status_code == 409
@@ -73,7 +73,7 @@ def test_purchasing_more_than_allowed_points(client):
 
 def test_purchasing_more_than_12_places_in_one_go(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Weight", "competition": "Spring Festival", "places": 13},
     )
     assert response.status_code == 409
@@ -85,7 +85,7 @@ def test_purchasing_more_than_12_places_in_one_go(client):
 
 def test_purchasing_more_than_12_places_in_multiple_go(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Weight", "competition": "Spring Festival", "places": 8},
     )
     assert response.status_code == 200
@@ -93,7 +93,7 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
     assert b"Number of Places: 12" in response.data
     assert b"Points available: 5" in response.data
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Weight", "competition": "Spring Festival", "places": 5},
     )
     assert response.status_code == 409
@@ -105,7 +105,7 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
 
 def test_purchasing_more_than_available_places(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "She Lifts", "competition": "Light Weight", "places": 5},
     )
     assert response.status_code == 409
@@ -113,7 +113,7 @@ def test_purchasing_more_than_available_places(client):
 
 
 def test_booking_button_is_hidden_for_past_competitions(client):
-    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    response = client.post("/show-summary", data={"email": "john@simplylift.co"})
     assert response.status_code == 200
     assert (
         b'<a href="/book/Fall%20Classic/Simply%20Lift">Book Places</a>'
@@ -122,7 +122,7 @@ def test_booking_button_is_hidden_for_past_competitions(client):
 
 
 def test_booking_button_is_shown_for_future_competitions(client):
-    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    response = client.post("/show-summary", data={"email": "john@simplylift.co"})
     assert response.status_code == 200
     assert (
         b'<a href="/book/Black%20Hole/Simply%20Lift">Book Places</a>' in response.data
@@ -131,7 +131,7 @@ def test_booking_button_is_shown_for_future_competitions(client):
 
 def test_booking_past_competition(client):
     response = client.post(
-        "/purchasePlaces",
+        "/purchase-places",
         data={"club": "Simply Lift", "competition": "Fall Classic", "places": 1},
     )
     assert response.status_code == 410
@@ -140,7 +140,7 @@ def test_booking_past_competition(client):
 
 
 def test_booking_button_hidden_for_full_competitions(client):
-    response = client.post("/showSummary", data={"email": "john@simplylift.co"})
+    response = client.post("/show-summary", data={"email": "john@simplylift.co"})
     assert response.status_code == 200
     assert (
         b'<a href="/book/Full%20Weight/Simply%20Lift">Book Places</a>'
