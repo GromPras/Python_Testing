@@ -16,6 +16,6 @@
         <ul>
             {% for club in clubs %}<li>{{ club['name'] }}: {{ club['points'] }} Points</li>{% endfor %}
         </ul>
-        <a href="/">Go Back</a>
+        <a href="{{ url_for('index) }}">Go Back</a>
     </body>
 </html>

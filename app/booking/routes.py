@@ -42,7 +42,7 @@ def show_summary():
     except IndexError:
         flash("Sorry, that email wasn't found.")
         return render_template("index.html"), 401
-    return render_template("welcome.html", club=club, competitions=competitions)
+    return render_template("booking/welcome.html", club=club, competitions=competitions)
 
 
 @bp.route("/book/<competition>/<club>")
@@ -53,19 +53,25 @@ def book(competition, club):
         if found_competition["finished"]:
             flash("Sorry, this competition has already ended.")
             return (
-                render_template("welcome.html", club=club, competitions=competitions),
+                render_template(
+                    "booking/welcome.html", club=club, competitions=competitions
+                ),
                 302,
             )
         if found_club and found_competition:
             return render_template(
-                "booking.html", club=found_club, competition=found_competition
+                "booking/booking.html", club=found_club, competition=found_competition
             )
         else:
             flash("Not found: this resource does not exists")
-            return render_template("welcome.html", club=club, competitions=competitions)
+            return render_template(
+                "booking/welcome.html", club=club, competitions=competitions
+            )
     except IndexError:
         flash("Something went wrong-please try again")
-        return render_template("welcome.html", club=club, competitions=competitions)
+        return render_template(
+            "booking/welcome.html", club=club, competitions=competitions
+        )
 
 
 @bp.route("/purchase-places", methods=["POST"])
@@ -86,28 +92,41 @@ def purchase_places():
         competition["registered"][club["name"]] = places_required + places_booked
         club["points"] = int(club["points"]) - places_required
         flash("Great-booking complete!")
-        return render_template("welcome.html", club=club, competitions=competitions)
+        return render_template(
+            "booking/welcome.html", club=club, competitions=competitions
+        )
 
     if competition["finished"]:
         flash("Sorry, this competition has already ended.")
         return (
-            render_template("welcome.html", club=club, competitions=competitions),
+            render_template(
+                "booking/welcome.html", club=club, competitions=competitions
+            ),
             410,
         )
 
     if places_required > int(club["points"]):
         flash(f"You do not have enough points. Your points: {club['points']}")
-        return render_template("booking.html", club=club, competition=competition), 409
+        return (
+            render_template("booking/booking.html", club=club, competition=competition),
+            409,
+        )
 
     if places_required > 12 or (places_required + places_booked) > 12:
         flash("You cannot purchase more than 12 places for the same competition.")
-        return render_template("booking.html", club=club, competition=competition), 409
+        return (
+            render_template("booking/booking.html", club=club, competition=competition),
+            409,
+        )
 
     if int(competition["number_of_places"]) - places_required < 0:
         flash(
             f"There is not enough places left: {competition['number_of_places']} remaining places."
         )
-        return render_template("booking.html", club=club, competition=competition), 409
+        return (
+            render_template("booking/booking.html", club=club, competition=competition),
+            409,
+        )
 
     competition["number_of_places"] = (
         int(competition["number_of_places"]) - places_required
@@ -115,9 +134,9 @@ def purchase_places():
     competition["registered"][club["name"]] = places_required + places_booked
     club["points"] = int(club["points"]) - places_required
     flash("Great-booking complete!")
-    return render_template("welcome.html", club=club, competitions=competitions)
+    return render_template("booking/welcome.html", club=club, competitions=competitions)
 
 
 @bp.route("/points-board")
 def display_board():
-    return render_template("display_board.html", clubs=clubs)
+    return render_template("booking/display_board.html", clubs=clubs)
