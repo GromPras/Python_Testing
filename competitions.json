@@ -3,27 +3,27 @@
         {
             "name": "Spring Festival",
             "date": "2025-03-27 10:00:00",
-            "numberOfPlaces": "25"
+            "number_of_places": "25"
         },
         {
             "name": "Fall Classic",
             "date": "2020-10-22 13:30:00",
-            "numberOfPlaces": "13"
+            "number_of_places": "13"
         },
         {
             "name": "Black Hole",
             "date": "2025-10-22 13:30:00",
-            "numberOfPlaces": "999999"
+            "number_of_places": "999999"
         },
         {
             "name": "Full Weight",
             "date": "2025-10-22 13:30:00",
-            "numberOfPlaces": "0"
+            "number_of_places": "0"
         },
         {
             "name": "Light Weight",
             "date": "2025-10-22 13:30:00",
-            "numberOfPlaces": "4"
+            "number_of_places": "4"
         }
     ]
 }

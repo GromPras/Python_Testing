@@ -6,7 +6,7 @@
     </head>
     <body>
         <h2>{{ competition['name'] }}</h2>
-        Places available: {{ competition['numberOfPlaces'] }}
+        Places available: {{ competition['number_of_places'] }}
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul>
