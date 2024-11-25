@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from flask import render_template, request, flash
+from flask import render_template, request, flash, current_app
 from app.booking import bp
 
 
@@ -85,7 +85,7 @@ def purchase_places():
 
     # TODO: Remove for production
     # Bypass validation for locust's performance test
-    if app.debug and competition["name"] == "Black Hole":  # pragma: no cover
+    if current_app.debug and competition["name"] == "Black Hole":  # pragma: no cover
         competition["number_of_places"] = (
             int(competition["number_of_places"]) - places_required
         )
