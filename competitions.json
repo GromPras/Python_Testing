@@ -19,6 +19,11 @@
             "name": "Full Weight",
             "date": "2025-10-22 13:30:00",
             "numberOfPlaces": "0"
+        },
+        {
+            "name": "Light Weight",
+            "date": "2025-10-22 13:30:00",
+            "numberOfPlaces": "4"
         }
     ]
 }
