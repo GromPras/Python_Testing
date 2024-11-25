@@ -43,7 +43,7 @@ def index():
 
 
 @app.route("/show-summary", methods=["POST"])
-def showSummary():
+def show_summary():
     try:
         club = [club for club in clubs if club["email"] == request.form["email"]][0]
     except IndexError:
@@ -55,17 +55,17 @@ def showSummary():
 @app.route("/book/<competition>/<club>")
 def book(competition, club):
     try:
-        foundClub = [c for c in clubs if c["name"] == club][0]
-        foundCompetition = [c for c in competitions if c["name"] == competition][0]
-        if foundCompetition["finished"]:
+        found_club = [c for c in clubs if c["name"] == club][0]
+        found_competition = [c for c in competitions if c["name"] == competition][0]
+        if found_competition["finished"]:
             flash("Sorry, this competition has already ended.")
             return (
                 render_template("welcome.html", club=club, competitions=competitions),
                 302,
             )
-        if foundClub and foundCompetition:
+        if found_club and found_competition:
             return render_template(
-                "booking.html", club=foundClub, competition=foundCompetition
+                "booking.html", club=found_club, competition=found_competition
             )
         else:
             flash("Not found: this resource does not exists")
