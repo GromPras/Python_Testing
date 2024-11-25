@@ -76,22 +76,22 @@ def book(competition, club):
 
 
 @app.route("/purchase-places", methods=["POST"])
-def purchasePlaces():
+def purchase_places():
     competition = [c for c in competitions if c["name"] == request.form["competition"]][
         0
     ]
     club = [c for c in clubs if c["name"] == request.form["club"]][0]
-    placesRequired = int(request.form["places"])
+    places_required = int(request.form["places"])
     places_booked = int(get_places_booked(competition, club["name"]))
 
     # TODO: Remove for production
     # Bypass validation for locust's performance test
     if app.debug and competition["name"] == "Black Hole":  # pragma: no cover
-        competition["numberOfPlaces"] = (
-            int(competition["numberOfPlaces"]) - placesRequired
+        competition["number_of_places"] = (
+            int(competition["number_of_places"]) - places_required
         )
-        competition["registered"][club["name"]] = placesRequired + places_booked
-        club["points"] = int(club["points"]) - placesRequired
+        competition["registered"][club["name"]] = places_required + places_booked
+        club["points"] = int(club["points"]) - places_required
         flash("Great-booking complete!")
         return render_template("welcome.html", club=club, competitions=competitions)
 
@@ -102,23 +102,25 @@ def purchasePlaces():
             410,
         )
 
-    if placesRequired > int(club["points"]):
+    if places_required > int(club["points"]):
         flash(f"You do not have enough points. Your points: {club['points']}")
         return render_template("booking.html", club=club, competition=competition), 409
 
-    if placesRequired > 12 or (placesRequired + places_booked) > 12:
+    if places_required > 12 or (places_required + places_booked) > 12:
         flash("You cannot purchase more than 12 places for the same competition.")
         return render_template("booking.html", club=club, competition=competition), 409
 
-    if int(competition["numberOfPlaces"]) - placesRequired < 0:
+    if int(competition["number_of_places"]) - places_required < 0:
         flash(
-            f"There is not enough places left: {competition['numberOfPlaces']} remaining places."
+            f"There is not enough places left: {competition['number_of_places']} remaining places."
         )
         return render_template("booking.html", club=club, competition=competition), 409
 
-    competition["numberOfPlaces"] = int(competition["numberOfPlaces"]) - placesRequired
-    competition["registered"][club["name"]] = placesRequired + places_booked
-    club["points"] = int(club["points"]) - placesRequired
+    competition["number_of_places"] = (
+        int(competition["number_of_places"]) - places_required
+    )
+    competition["registered"][club["name"]] = places_required + places_booked
+    club["points"] = int(club["points"]) - places_required
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)
 
