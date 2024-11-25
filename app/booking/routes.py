@@ -116,3 +116,8 @@ def purchase_places():
     club["points"] = int(club["points"]) - places_required
     flash("Great-booking complete!")
     return render_template("welcome.html", club=club, competitions=competitions)
+
+
+@bp.route("/points-board")
+def display_board():
+    return render_template("display_board.html", clubs=clubs)

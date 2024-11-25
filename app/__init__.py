@@ -11,4 +11,8 @@ def create_app():
     def index():
         return render_template("index.html")
 
+    @app.route("/logout")
+    def logout():
+        return redirect(url_for("index"))
+
     return app
