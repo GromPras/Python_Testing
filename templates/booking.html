@@ -14,7 +14,7 @@
                 </ul>
             {% endif %}
         {% endwith %}
-        <form action="/purchasePlaces" method="post">
+        <form action="/purchase-places" method="post">
             <input type="hidden" name="club" value="{{ club['name'] }}">
             <input type="hidden" name="competition" value="{{ competition['name'] }}">
             <label for="places">How many places?</label>
@@ -23,4 +23,3 @@
         </form>
     </body>
 </html>
-
