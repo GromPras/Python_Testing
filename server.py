@@ -86,7 +86,7 @@ def purchasePlaces():
 
     # TODO: Remove for production
     # Bypass validation for locust's performance test
-    if app.debug and competition["name"] == "Black Hole":
+    if app.debug and competition["name"] == "Black Hole":  # pragma: no cover
         competition["numberOfPlaces"] = (
             int(competition["numberOfPlaces"]) - placesRequired
         )
