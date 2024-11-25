@@ -1,9 +1,15 @@
 import pytest
-from server import app
+from app import create_app
 
 
 @pytest.fixture
-def client():
+def app():
+    app = create_app()
+    yield app
+
+
+@pytest.fixture
+def client(app):
     client = app.test_client()
     yield client
 
