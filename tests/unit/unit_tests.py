@@ -178,3 +178,10 @@ def test_points_display(client):
 def test_points_display_page_should_be_accessible_without_login(client):
     response = client.get("/")
     assert b'<a href="/points-board">Points Board</a>' in response.data
+
+
+def test_logout(client):
+    login(client, "john@simplylift.co")
+    response = client.get("/logout", follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Welcome to the GUDLFT Registration Portal!" in response.data
