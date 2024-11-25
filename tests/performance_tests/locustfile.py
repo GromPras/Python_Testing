@@ -14,11 +14,11 @@ class MyUser(HttpUser):
 
     @task
     def login(self):
-        self.client.post("/showSummary", data={"email": "john@simplylift.co"})
+        self.client.post("/show-summary", data={"email": "john@simplylift.co"})
 
     @task
     def purchase(self):
         self.client.post(
-            "/purchasePlaces",
+            "/purchase-places",
             data={"club": "Infinite Lift", "competition": "Black Hole", "places": 5},
         )
