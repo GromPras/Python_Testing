@@ -103,6 +103,15 @@ def test_purchasing_more_than_12_places_in_multiple_go(client):
     )
 
 
+def test_purchasing_more_than_available_places(client):
+    response = client.post(
+        "/purchasePlaces",
+        data={"club": "She Lifts", "competition": "Light Weight", "places": 5},
+    )
+    assert response.status_code == 409
+    assert b"There is not enough places left: 4 remaining places."
+
+
 def test_booking_button_is_hidden_for_past_competitions(client):
     response = client.post("/showSummary", data={"email": "john@simplylift.co"})
     assert response.status_code == 200
